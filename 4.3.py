@@ -1,13 +1,13 @@
 def main():
-
+    
     n = int(input("Введите начальный день: "))
     m = int(input("Введите шаг: "))
 
-    dates = []
+    result = ""
 
     for day in range(n, 32, m):
-        dates.append(day)
+        result += str(day) + " "
 
-    print(*dates)
+    print(result)
 
 main()
