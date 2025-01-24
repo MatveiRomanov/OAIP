@@ -2,12 +2,9 @@ def main():
 
     max1 = float(0)
     max2 = float(0)
+    num = int(input())
 
-    while True:
-        num = int(input())
-
-        if num >= 1000:
-            break
+    while num >= 1000:
 
         if num > max1:
             max2 = max1
@@ -15,6 +12,8 @@ def main():
 
         elif num > max2 and num != max1:
             max2 = num
+
+        num = int(input())
 
     print(max2)
 
