@@ -1,14 +1,14 @@
 def main():
-
+    
     count = int(input("Введите число имен: "))
 
-    names = []
+    result = ""
 
-    for i in range(count):
+    for index in range(1, count + 1):
         name = input("Введите имя: ")
-        names.append(name)
+        result += f"{index}. {name}\n"
+        
+    print(result)
 
-    for index, name in enumerate(names, start=1):
-        print(f"{index}. {name}")
 
 main()
