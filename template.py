@@ -5,21 +5,26 @@ def template(a, b, c):
     s = p / 2
     area = math.sqrt(s * (s - a) * (s - b) * (s - c))
 
-    if a == c or a == b or b == c:
-        rb = "Да"
-        rs = "Нет"
-        print("Периметр:", p)
-        print("Площадь:", area)
-        print("Равнобедренный:", rb)
-        print("Равносторнний:", rs)
-
-    elif a == b == c:
-        rb = "Нет"
-        rs = "Да"
-        print("Периметр:", p)
-        print("Площадь:", area)
-        print("Равнобедренный:", rb)
-        print("Равносторнний:", rs)
-
+    if a + b <= c or a + c <= b or b + c <= a:
+        print(None)
+        
     else:
-        print("None")
+        
+        if a == c or a == b or b == c:
+            rb = "Да"
+            rs = "Нет"
+            print("Периметр:", p)
+            print("Площадь:", area)
+            print("Равнобедренный:", rb)
+            print("Равносторнний:", rs)
+
+        elif a == b == c:
+            rb = "Нет"
+            rs = "Да"
+            print("Периметр:", p)
+            print("Площадь:", area)
+            print("Равнобедренный:", rb)
+            print("Равносторнний:", rs)
+
+        else:
+            print("None")
