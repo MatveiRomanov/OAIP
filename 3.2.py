@@ -1,16 +1,12 @@
 def main():
 
     count = 0
+    num = float(input())
 
-    while True:
-        num = float(input())
-
-        if num > 36.6:
-            break
-
-        elif num < 0:
+    while num < 36.6:
+        if num < 0:
             count += 1
-
+        num = float(input())
     print(count)
 
 
