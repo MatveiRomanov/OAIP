@@ -6,11 +6,11 @@ from max_from_list import MFL
 
 
 def main():
-    #print(factorial(8))
-    print(fibonacci(50))
-    #print(pereschet("ывфывфывфы"))
-    #simple_or_not()
-    #max_from_list()
+    print(factorial(8))
+    print(fibonacci(10))
+    print(pereschet("Немного букв для проверки"))
+    print(SON(7))
+    print(MFL([3450, 434, 5456, 3455]))
 
 
 if __name__ == "__main__":
