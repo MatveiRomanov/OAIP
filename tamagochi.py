@@ -14,13 +14,23 @@ class Tamagochi:
         if self.hunger < 100:
             self.hunger = min(100, self.hunger + 30)
             self.bathroom += 20
-            print(f"{self.name} поел. Сытость = {self.hunger}\nНужда = {self.bathroom}")
+            self.energy += 5
+            self.happiness += 10
+            print(f"{self.name} поел(а).\n Сытость = {self.hunger}\n Нужда = {self.bathroom}\n Бодрость = {self.energy}\n Счастье = {self.happiness}")
         else:
-            print(f"{self.name} не голоден")
+            print(f"{self.name} не голод(ен/на)")
 
     def play(self):
         if self.energy > 20:
             self.happiness = min(100, self.happiness + 20)
             self.energy -= 20
             self.bathroom += 10
-            print(f"")
+            self.hunger -= 10
+            print(f"{self.name} поиграл(а)\n Счастье = {self.happiness}\n Бодрость = {self.energy}\n Нужда = {self.bathroom}\n Сытость =  {self.hunger}")
+        else:
+            print(f"{self.name} устал(а)")
+
+
+    def sleep(self):
+        if self.energy < 100:
+            self.energy = min(100, self.energy + 30)
