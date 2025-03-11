@@ -1,9 +1,10 @@
 class Button:
-    def __init__(self, text, x, y, z, color="серый"):
+    def __init__(self, text, x, y, a, b, color="серый"):
         self.text = text
         self.x = x
         self.y = y
-        self.z = z
+        self.a = a
+        self.b = b
         self.color = color
 
     def press(self):
@@ -20,10 +21,9 @@ class Button:
         self.color = new_color
         print(f"Цвет кнопки изменен на {self.color}")
 
-    def re_size(self, new_x, new_y, new_z):
-        self.x,y,z = new_x, new_y, new_z
-        print(f"Размер кнопки изменен на {self.x,y,z}")
+    def re_size(self, new_x, new_y, new_a, new_b):
+        self.x,y,a,b = new_x, new_y, new_a, new_b
+        print(f"Размер кнопки изменен на {self.x,y,a,b}")
 
     def button_info(self):
-        print(f"Текст кнопки: '{self.text}', цвет: '{self.color}', размер: x = {self.x} y = {self.y} z = {self.z}")
-
+        print(f"Текст кнопки: '{self.text}', цвет: '{self.color}', расположение: x = {self.x} y = {self.y}, размер: a = {self.a}, b = {self.b}")
