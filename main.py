@@ -5,18 +5,6 @@ class Item:
     def get_name(self):
         return self.__name
 
-    def use(self):
-        return f"Осмотр: {self.__name}"
-
-    def craft(self, other, inventory):
-        return None
-
-    def disassemble(self):
-        return [Item(self.__name)]
-
-    def __repr__(self):
-        return self.__name
-
 
 class Tool:
     def __init__(self, name, durability, material):
@@ -27,46 +15,14 @@ class Tool:
     def get_name(self):
         return self.__name
 
-    def use(self):
-        self.__durability -= 1
-        if self.__durability <= 0:
-            return f"{self.__name} сломался!"
-        return f"Использован {self.__name}. Прочность: {self.__durability}"
+    def get_durability(self):
+        return self.__durability
 
-    def craft(self, other, inventory):
-        if self.__name == "Diamond Sword" and other.get_name() == "Netherite Ingot":
-            if inventory.count("Netherite Ingot") >= 1:
-                inventory.remove("Netherite Ingot", 1)
-                new_tool = Tool("Netherite Sword", 2031, "Netherite")
-                return new_tool
-
-        elif self.__name == "Diamond Pickaxe" and other.get_name() == "Netherite Ingot":
-            if inventory.count("Netherite Ingot") >= 1:
-                inventory.remove("Netherite Ingot", 1)
-                new_tool = Tool("Netherite Pickaxe", 2031, "Netherite")
-                return new_tool
-
-        return None
-
-    def disassemble(self):
-        fragments = []
-        if "Diamond" in self.__material:
-            fragments.append(Item("Diamond"))
-        if "Iron" in self.__material:
-            fragments.append(Item("Iron Ingot"))
-        if "Gold" in self.__material:
-            fragments.append(Item("Gold Ingot"))
-        if "Stone" in self.__material:
-            fragments.append(Item("Cobblestone"))
-
-        fragments.append(Item("Stick"))
-        return fragments
+    def get_material(self):
+        return self.__material
 
     def info(self):
         return f"{self.__name} (Материал: {self.__material}, Прочность: {self.__durability})"
-
-    def __repr__(self):
-        return self.__name
 
 
 class Inventory:
@@ -74,7 +30,7 @@ class Inventory:
         self.items = []
 
     def add(self, item, count=1):
-        for _ in range(count):
+        for i in range(count):
             self.items.append(item)
 
     def remove(self, item_name, count):
@@ -96,105 +52,82 @@ class Inventory:
         c = Counter([item.get_name() for item in self.items])
         return dict(c)
 
-    def find_item(self, item_name):
-        for item in self.items:
-            if item.get_name() == item_name:
-                return item
-        return None
 
+class CraftingTable:
+    def __init__(self):
+        self.recipes = {
+            "Diamond Sword": (
+            [Item("Diamond"), Item("Diamond"), Item("Stick")], Tool("Diamond Sword", 1561, "Diamond")),
+            "Iron Pickaxe": ([Item("Iron Ingot"), Item("Iron Ingot"), Item("Iron Ingot"), Item("Stick"), Item("Stick")],
+                             Tool("Iron Pickaxe", 250, "Iron")),
+            "Golden Shovel": ([Item("Gold Ingot"), Item("Stick"), Item("Stick")], Tool("Golden Shovel", 32, "Gold")),
+            "Stone Axe": ([Item("Cobblestone"), Item("Cobblestone"), Item("Cobblestone"), Item("Stick"), Item("Stick")],
+                          Tool("Stone Axe", 131, "Stone")),
+            "Netherite Sword": ([Item("Netherite Ingot"), Tool("Diamond Sword", 1561, "Diamond")],
+                                Tool("Netherite Sword", 2031, "Netherite")),
+            "Diamond Hoe": (
+                [Item("Diamond"), Item("Diamond"), Item("Stick"), Item("Stick")], Tool("Diamond Hoe", 1561, "Diamond")),
+            "Iron Axe": ([Item("Iron Ingot"), Item("Iron Ingot"), Item("Iron Ingot"), Item("Stick"), Item("Stick")],
+                         Tool("Iron Axe", 250, "Iron")),
+            "Golden Pickaxe": (
+            [Item("Gold Ingot"), Item("Gold Ingot"), Item("Gold Ingot"), Item("Stick"), Item("Stick")],
+            Tool("Golden Pickaxe", 32, "Gold")),
+            "Diamond Pickaxe": ([Item("Diamond"), Item("Diamond"), Item("Diamond"), Item("Stick"), Item("Stick")],
+                                Tool("Diamond Pickaxe", 1561, "Diamond")),
+            "Netherite Pickaxe": ([Item("Netherite Ingot"), Tool("Diamond Pickaxe", 1561, "Diamond")],
+                                  Tool("Netherite Pickaxe", 2031, "Netherite"))
+        }
 
-def disassemble_item(item, inventory):
-    print(f"Разбор: {item.get_name()}")
+    def craft(self, tool_name, inventory):
+        if tool_name not in self.recipes:
+            print(f"Рецепт {tool_name} не найден")
+            return None
 
-    inventory.remove(item.get_name(), 1)
+        requirements, result = self.recipes[tool_name]
 
-    components = item.disassemble()
+        for item in requirements:
+            if inventory.count(item.get_name()) < 1:
+                print(f"Не хватает {item.get_name()} для создания {tool_name}")
+                return None
 
-    for component in components:
-        inventory.add(component)
-        print(f"Получен: {component.get_name()}")
+        for item in requirements:
+            inventory.remove(item.get_name(), 1)
 
-    return components
-
-
-def craft_items(item1, item2, inventory):
-    print(f"Крафт: {item1.get_name()} + {item2.get_name()}")
-
-    result = item1.craft(item2, inventory)
-    if result is None:
-        result = item2.craft(item1, inventory)
-
-    if result:
         inventory.add(result)
         print(f"Создано: {result.info()}")
-    else:
-        print("Крафт невозможен")
+        return result
 
-    return result
+    def disassemble(self, tool_name, inventory):
+        if tool_name not in self.recipes:
+            print(f"Рецепт {tool_name} не найден")
+            return None
+
+        requirements, result = self.recipes[tool_name]
+
+        if inventory.count(tool_name) < 1:
+            print(f"Не хватает {tool_name} для разборки")
+            return None
+
+        inventory.remove(tool_name, 1)
+
+        for item in requirements:
+            inventory.add(item)
+
+        print(f"Разобрано: {tool_name}")
+        return requirements
 
 
-if __name__ == "__main__":
-    inv = Inventory()
+inv = Inventory()
+inv.add(Item("Diamond"), 3)
+inv.add(Item("Stick"), 2)
+inv.add(Item("Netherite Ingot"), 1)
 
-    stick = Item("Stick")
-    diamond = Item("Diamond")
-    iron = Item("Iron Ingot")
-    gold = Item("Gold Ingot")
-    stone = Item("Cobblestone")
-    netherite = Item("Netherite Ingot")
+crafting_table = CraftingTable()
 
-    inv.add(stick, 5)
-    inv.add(diamond, 3)
-    inv.add(iron, 3)
-    inv.add(gold, 2)
-    inv.add(stone, 4)
-    inv.add(netherite, 2)
+print("До крафта:", inv.show())
+crafting_table.craft("Diamond Sword", inv)
+crafting_table.craft("Netherite Sword", inv)
+print("После крафта:", inv.show())
 
-    print("Начало:")
-    print(inv.show())
-    print()
-
-    diamond_sword = Tool("Diamond Sword", 1561, "Diamond")
-    inv.add(diamond_sword)
-
-    diamond_pickaxe = Tool("Diamond Pickaxe", 1561, "Diamond")
-    inv.add(diamond_pickaxe)
-
-    iron_pickaxe = Tool("Iron Pickaxe", 250, "Iron")
-    inv.add(iron_pickaxe)
-
-    print("С инструментами:")
-    print(inv.show())
-    print()
-
-    stick_item = inv.find_item("Stick")
-    diamond_item = inv.find_item("Diamond")
-
-    if stick_item and diamond_item:
-        craft_items(stick_item, diamond_item, inv)
-
-    print("После крафта:")
-    print(inv.show())
-    print()
-
-    diamond_sword = inv.find_item("Diamond Sword")
-    netherite_item = inv.find_item("Netherite Ingot")
-
-    if diamond_sword and netherite_item:
-        craft_items(diamond_sword, netherite_item, inv)
-
-    print("После улучшения:")
-    print(inv.show())
-    print()
-
-    iron_pickaxe = inv.find_item("Iron Pickaxe")
-    if iron_pickaxe:
-        disassemble_item(iron_pickaxe, inv)
-
-    print("После разбора:")
-    print(inv.show())
-    print()
-
-    for item in [inv.find_item("Stick"), inv.find_item("Diamond Sword"), inv.find_item("Netherite Sword")]:
-        if item:
-            print(item.use())
+crafting_table.disassemble("Netherite Sword", inv)
+print("После разборки:", inv.show())
