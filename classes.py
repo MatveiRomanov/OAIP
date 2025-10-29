@@ -365,7 +365,6 @@ class Archer(Character):
             return self.attack_power // 2
 
     def special_ability(self):
-        """Особое умение - залп стрел"""
         if self.arrows >= 3:
             self.arrows -= 3
             damage = self.attack_power * 3
@@ -376,4 +375,5 @@ class Archer(Character):
             print("Недостаточно стрел для залпа!")
 
             return 0
+
 
