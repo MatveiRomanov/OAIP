@@ -1,12 +1,10 @@
 from tasks import *
 
 
-
 def main():
-    print("Лабораторная работа №8 - Lambda функции")
-    print("=" * 50)
+    print("\nЗадача 1: Сортировка кортежей с использованием lambda")
+    print("Сортировка по: 3 элементу → 2 элементу → длине 1 элемента → 2 элементу (по убыванию)")
 
-    print("\nЗадача 1: Сортировка кортежей")
     tuples_data = [
         ("apple", 5, "red"),
         ("banana", 3, "yellow"),
@@ -15,23 +13,65 @@ def main():
         ("grape", 3, "purple")
     ]
 
-    print("Исходный список:", tuples_data)
+    print("Исходный список:")
+    for item in tuples_data:
+        print(f"  {item}")
+
     sorted_tuples = sort_tuples(tuples_data)
-    print("Отсортированный список:", sorted_tuples)
+    print("\nОтсортированный список:")
+    for item in sorted_tuples:
+        print(f"  {item}")
 
-    print("\nЗадача 2: Обработка строк")
-    strings_data = ["hi", "hello", "test", "a", "python", "ok"]
+    print("\nЗадача 2: Дополнение слов звездочками с использованием map и lambda")
 
-    print("Исходный список:", strings_data)
-    processed_strings = process_strings(strings_data)
-    print("Обработанный список:", processed_strings)
+    test_texts = [
+        "Expanding the space available for living",
+    ]
 
-    print("\nЗадача 3: Фильтрация чисел")
-    numbers_data = [5, 12, 18, 21, 9, 25, 3, 15, 30, 7]
+    for i, text in enumerate(test_texts, 1):
+        print(f"\nПример {i}:")
+        print(f"Ввод: {text}")
+        processed = process_text(text)
+        print(f"Вывод: {processed}")
 
-    print("Исходный список:", numbers_data)
-    filtered_numbers = filter_numbers(numbers_data)
-    print("Отфильтрованный список:", filtered_numbers)
+        print("Каждое слово с новой строки:")
+        for word in processed.split():
+            print(f"  {word}")
+
+    print("\nЗадача 3: Поиск мест в театре с использованием filter и lambda")
+
+    print("\nПример 1 (поиск 4 свободных мест подряд):")
+    data1 = ["1001100011", "0001100001", "100001001", "1110010111"]
+    print("Зал:")
+    for i, row in enumerate(data1, 1):
+        print(f"  Ряд {i}: {row} (1 - занято, 0 - свободно)")
+
+    print("\nРезультат поиска (ряды с 4 свободными местами подряд):")
+    result1 = nearby(data1, places=4)
+    for row in result1:
+        print(f"  {row}")
+
+    print("\nПример 2 (поиск 1 свободного места по умолчанию):")
+    data2 = ["111", "101101", "11000"]
+    print("Зал:")
+    for i, row in enumerate(data2, 1):
+        print(f"  Ряд {i}: {row} (1 - занято, 0 - свободно)")
+
+    print("\nРезультат поиска (ряды с хотя бы 1 свободным местом):")
+    result2 = nearby(data2)
+    for row in result2:
+        print(f"  {row}")
+
+    print("\nПример 3 (поиск 2 свободных мест подряд):")
+    data3 = ["101", "1001", "1100", "1111"]
+    print("Зал:")
+    for i, row in enumerate(data3, 1):
+        print(f"  Ряд {i}: {row}")
+
+    print("\nРезультат поиска (ряды с 2 свободными местами подряд):")
+    result3 = nearby(data3, places=2)
+    for row in result3:
+        print(f"  {row}")
 
 
 if __name__ == "__main__":
