@@ -1,3 +1,6 @@
+import random
+
+
 class Widget:
 
     def __init__(self, widget_id, styles=None):
@@ -349,7 +352,6 @@ class Archer(Character):
         super().attack()
         if self.arrows > 0:
             self.arrows -= 1
-            import random
             if random.random() < self.critical_chance:
                 damage = self.attack_power * 2
                 print(f"{self.name} делает выстрел с дистанции! КРИТИЧЕСКИЙ УРОН: {damage}")
@@ -374,3 +376,4 @@ class Archer(Character):
             print("Недостаточно стрел для залпа!")
 
             return 0
+
