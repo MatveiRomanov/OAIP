@@ -126,7 +126,7 @@ class ColdWeapon(Weapon):
 
     def __init__(self, name, base_damage, weight, weapon_type):
         super().__init__(name, base_damage, weight)
-        self.weapon_type = weapon_type  # одноручный, двуручный и т.д.
+        self.weapon_type = weapon_type  
 
     def calculate_damage(self):
         return self.base_damage * 1.1
@@ -372,4 +372,5 @@ class Archer(Character):
             return damage
         else:
             print("Недостаточно стрел для залпа!")
+
             return 0
